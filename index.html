@@ -1,1261 +1,578 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no">
+<title>QR Review Demo</title>
 
-<title>3974 - Dawa Dawa | QR Review Scanner</title>
+<script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
-
-/* =========================================================
-   GENERAL
-========================================================= */
-
 *{
     box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
 }
 
-html,
 body{
     margin:0;
-    padding:0;
-    width:100%;
-    min-height:100%;
-}
-
-body{
+    padding:20px;
+    min-height:100vh;
     font-family:Arial,Helvetica,sans-serif;
     background:#f1f3f4;
-    display:flex;
-    justify-content:center;
-    align-items:flex-start;
-    padding:15px;
+    color:#222;
 }
-
-
-/* =========================================================
-   MAIN CARD
-========================================================= */
 
 .container{
     width:100%;
     max-width:500px;
-    background:#ffffff;
-    border-radius:16px;
-    overflow:hidden;
-    box-shadow:0 5px 25px rgba(0,0,0,0.15);
+    margin:auto;
 }
 
-
-/* =========================================================
-   HEADER
-========================================================= */
-
-.header{
-    padding:25px 22px 22px;
-    background:#ffffff;
-    border-top:9px solid #673ab7;
-    border-bottom:1px solid #eeeeee;
-    text-align:center;
-}
-
-.header h1{
-    margin:0 0 8px;
-    font-size:25px;
-    font-weight:600;
-    color:#202124;
-}
-
-.header p{
-    margin:0;
-    font-size:14px;
-    line-height:1.5;
-    color:#5f6368;
-}
-
-
-/* =========================================================
-   CONTENT
-========================================================= */
-
-.content{
+.card{
+    background:white;
     padding:22px;
+    border-radius:18px;
+    box-shadow:0 5px 25px rgba(0,0,0,.12);
+    margin-bottom:20px;
 }
 
+h1{
+    margin:0 0 8px;
+    text-align:center;
+    font-size:27px;
+}
 
-/* =========================================================
-   LABEL
-========================================================= */
-
-label{
-    display:block;
-    margin-bottom:8px;
-    font-size:15px;
+.demo{
+    text-align:center;
+    background:#fff3cd;
+    color:#856404;
+    padding:10px;
+    border-radius:10px;
     font-weight:bold;
-    color:#202124;
+    font-size:13px;
+    margin-bottom:20px;
 }
 
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:20px;
+}
 
-/* =========================================================
-   DEMO EMAIL
-========================================================= */
-
-.email{
+#reader{
     width:100%;
-    height:50px;
-    padding:0 14px;
-    margin-bottom:22px;
-
-    border:1px solid #dadce0;
-    border-radius:7px;
-
-    background:#ffffff;
-
-    font-size:16px;
-    color:#202124;
-
-    outline:none;
-}
-
-.email:focus{
-    border-color:#673ab7;
-}
-
-
-/* =========================================================
-   CAMERA
-========================================================= */
-
-.camera-wrapper{
-    width:100%;
-    background:#000000;
-    border-radius:12px;
     overflow:hidden;
-    position:relative;
+    border-radius:14px;
 }
-
-#video{
-    display:block;
-    width:100%;
-    height:auto;
-    min-height:300px;
-    max-height:520px;
-    object-fit:cover;
-    background:#000000;
-}
-
-
-/* =========================================================
-   SCAN FRAME
-========================================================= */
-
-.scan-frame{
-    position:absolute;
-
-    width:65vw;
-    max-width:280px;
-
-    height:65vw;
-    max-height:280px;
-
-    left:50%;
-    top:50%;
-
-    transform:translate(-50%,-50%);
-
-    border:3px solid #ffffff;
-    border-radius:15px;
-
-    box-shadow:
-        0 0 0 9999px rgba(0,0,0,0.30);
-
-    pointer-events:none;
-}
-
-
-/* =========================================================
-   SCAN CORNERS
-========================================================= */
-
-.scan-frame .corner{
-    position:absolute;
-    width:38px;
-    height:38px;
-}
-
-.corner.top-left{
-    top:-3px;
-    left:-3px;
-    border-top:5px solid #673ab7;
-    border-left:5px solid #673ab7;
-}
-
-.corner.top-right{
-    top:-3px;
-    right:-3px;
-    border-top:5px solid #673ab7;
-    border-right:5px solid #673ab7;
-}
-
-.corner.bottom-left{
-    bottom:-3px;
-    left:-3px;
-    border-bottom:5px solid #673ab7;
-    border-left:5px solid #673ab7;
-}
-
-.corner.bottom-right{
-    bottom:-3px;
-    right:-3px;
-    border-bottom:5px solid #673ab7;
-    border-right:5px solid #673ab7;
-}
-
-
-/* =========================================================
-   SCANNING LINE
-========================================================= */
-
-.scan-line{
-    position:absolute;
-    left:8%;
-    width:84%;
-    height:3px;
-    background:#673ab7;
-
-    top:10%;
-
-    animation:scanLine 2s linear infinite;
-}
-
-@keyframes scanLine{
-
-    0%{
-        top:10%;
-    }
-
-    50%{
-        top:88%;
-    }
-
-    100%{
-        top:10%;
-    }
-
-}
-
-
-/* =========================================================
-   BUTTON
-========================================================= */
-
-button{
-    width:100%;
-    height:52px;
-
-    margin-top:18px;
-
-    border:none;
-    border-radius:7px;
-
-    background:#673ab7;
-    color:#ffffff;
-
-    font-size:17px;
-    font-weight:bold;
-
-    cursor:pointer;
-}
-
-button:active{
-    transform:scale(0.99);
-}
-
-button.stop{
-    background:#d93025;
-}
-
-button:disabled{
-    opacity:0.55;
-    cursor:not-allowed;
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
 
 .status{
     margin-top:15px;
-
-    padding:13px;
-
-    background:#f8f5ff;
-
-    border-radius:7px;
-
+    padding:12px;
+    border-radius:10px;
+    background:#f5f5f5;
     text-align:center;
-
     font-size:14px;
-
-    line-height:1.5;
-
-    color:#5f6368;
 }
 
+button{
+    width:100%;
+    border:0;
+    padding:14px;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:bold;
+    margin-top:10px;
+}
 
-/* =========================================================
-   RESULT
-========================================================= */
+.primary{
+    background:#1a73e8;
+    color:white;
+}
 
-.result-title{
-    margin-top:25px;
-    margin-bottom:8px;
+.secondary{
+    background:#e9ecef;
+    color:#222;
+}
 
+input,
+textarea{
+    width:100%;
+    padding:13px;
+    margin-top:7px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:9px;
     font-size:15px;
-    font-weight:bold;
-
-    color:#202124;
 }
 
-.result{
-    width:100%;
-    min-height:65px;
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
 
-    padding:15px;
-
-    border:1px solid #dadce0;
-    border-radius:7px;
-
-    background:#ffffff;
-
-    color:#188038;
-
+label{
+    font-weight:bold;
     font-size:14px;
-    line-height:1.5;
-
-    word-break:break-word;
 }
 
+.stars{
+    display:flex;
+    justify-content:center;
+    gap:5px;
+    margin:15px 0;
+}
 
-/* =========================================================
-   REVIEW BUTTON
-========================================================= */
+.star{
+    font-size:35px;
+    cursor:pointer;
+    color:#ccc;
+}
 
-.review-button{
+.star.active{
+    color:#ffc107;
+}
 
+.review{
+    border:1px solid #ddd;
+    padding:14px;
+    border-radius:12px;
+    margin-top:12px;
+}
+
+.review strong{
+    display:block;
+    margin-bottom:5px;
+}
+
+.review-stars{
+    color:#f5a900;
+}
+
+.hidden{
     display:none;
+}
 
-    width:100%;
-
-    margin-top:14px;
-
-    padding:16px;
-
-    border-radius:7px;
-
-    background:#188038;
-
-    color:#ffffff;
-
-    text-decoration:none;
-
+.count{
     text-align:center;
-
-    font-size:17px;
-
+    font-size:22px;
     font-weight:bold;
-
 }
-
-
-/* =========================================================
-   RESET BUTTON
-========================================================= */
-
-.reset-button{
-
-    display:none;
-
-    background:#5f6368;
-
-}
-
-
-/* =========================================================
-   NOTE
-========================================================= */
-
-.note{
-
-    margin-top:20px;
-
-    padding:13px;
-
-    border-left:4px solid #673ab7;
-
-    background:#f8f5ff;
-
-    color:#555;
-
-    font-size:13px;
-
-    line-height:1.5;
-
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:400px){
-
-    body{
-        padding:8px;
-    }
-
-    .container{
-        border-radius:12px;
-    }
-
-    .header h1{
-        font-size:22px;
-    }
-
-    .content{
-        padding:17px;
-    }
-
-}
-
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="container">
 
+    <div class="card">
 
-    <!-- =====================================================
-         HEADER
-    ====================================================== -->
+        <h1>📱 QR Review Demo</h1>
 
-    <div class="header">
+        <div class="demo">
+            EDUCATIONAL DEMO — TEST REVIEWS ONLY
+        </div>
 
-        <h1>
-            3974 - Dawa Dawa
-        </h1>
+        <div class="subtitle">
+            Scan a QR code to start the demonstration.
+        </div>
 
-        <p>
-            Please scan the QR code to open the service review form.
-        </p>
+        <div id="reader"></div>
+
+        <div class="status" id="status">
+            Point your camera at a QR code.
+        </div>
+
+        <button class="secondary" onclick="startScanner()">
+            🔄 Start Scanner
+        </button>
 
     </div>
 
 
+    <!-- TEST REVIEW FORM -->
 
-    <!-- =====================================================
-         CONTENT
-    ====================================================== -->
+    <div class="card hidden" id="reviewSection">
 
-    <div class="content">
+        <h2>Test Review Form</h2>
 
+        <label>Test User / Email</label>
 
-        <!-- =================================================
-             PRACTICE EMAIL
-        ================================================== -->
+        <input
+            type="email"
+            id="email"
+            placeholder="example@test.com"
+        >
 
-        <label for="email">
-            Practice Email
-        </label>
+        <label>Your Rating</label>
 
+        <div class="stars">
 
-        <select id="email" class="email">
-
-            <option>
-                test.customer1@example.com
-            </option>
-
-            <option>
-                practice.user2@example.com
-            </option>
-
-            <option>
-                demo.review3@example.com
-            </option>
-
-        </select>
-
-
-
-        <!-- =================================================
-             CAMERA
-        ================================================== -->
-
-        <label>
-            Scan QR Code
-        </label>
-
-
-        <div class="camera-wrapper">
-
-            <video
-                id="video"
-                autoplay
-                playsinline
-                muted>
-            </video>
-
-
-            <div class="scan-frame">
-
-                <div class="corner top-left"></div>
-
-                <div class="corner top-right"></div>
-
-                <div class="corner bottom-left"></div>
-
-                <div class="corner bottom-right"></div>
-
-                <div class="scan-line"></div>
-
-            </div>
+            <span class="star" data-rating="1">★</span>
+            <span class="star" data-rating="2">★</span>
+            <span class="star" data-rating="3">★</span>
+            <span class="star" data-rating="4">★</span>
+            <span class="star" data-rating="5">★</span>
 
         </div>
 
+        <label>Review</label>
 
+        <textarea
+            id="reviewText"
+            placeholder="Write a test review..."
+        ></textarea>
 
-        <!-- =================================================
-             CAMERA BUTTON
-        ================================================== -->
-
-        <button
-            id="cameraButton"
-            onclick="cameraButtonClicked()">
-
-            📷 Open Mobile Camera
-
+        <button class="primary" onclick="submitReview()">
+            Submit Test Review
         </button>
 
-
-
-        <!-- =================================================
-             STATUS
-        ================================================== -->
-
-        <div
-            id="status"
-            class="status">
-
-            Camera is currently off.
-
-        </div>
-
-
-
-        <!-- =================================================
-             RESULT
-        ================================================== -->
-
-        <div class="result-title">
-
-            QR Code Result
-
-        </div>
-
-
-        <div
-            id="result"
-            class="result">
-
-            No QR code scanned yet.
-
-        </div>
-
-
-
-        <!-- =================================================
-             OPEN REVIEW
-        ================================================== -->
-
-        <a
-            id="reviewButton"
-            class="review-button"
-            href="#"
-            target="_blank"
-            rel="noopener">
-
-            ⭐ Open Review Form
-
-        </a>
-
-
-
-        <!-- =================================================
-             RESET
-        ================================================== -->
-
-        <button
-            id="resetButton"
-            class="reset-button"
-            onclick="resetScanner()">
-
-            Scan Another QR Code
-
+        <button class="secondary" onclick="clearForm()">
+            Clear
         </button>
 
+    </div>
 
 
-        <!-- =================================================
-             NOTE
-        ================================================== -->
+    <!-- DASHBOARD -->
 
-        <div class="note">
+    <div class="card">
 
-            This scanner is for accessing your genuine review form.
-            The example email addresses above are dummy addresses for
-            interface testing only.
+        <h2>📊 Demo Dashboard</h2>
 
+        <div class="count">
+            <span id="reviewCount">0</span>
+            Test Reviews
         </div>
 
+        <div id="reviews"></div>
+
+        <button class="secondary" onclick="clearAllReviews()">
+            Delete All Test Reviews
+        </button>
 
     </div>
 
 </div>
 
 
-
-<!-- =========================================================
-     jsQR LIBRARY
-========================================================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-
-
-
 <script>
 
-/* =========================================================
-   YOUR QR CODE
-========================================================= */
-
-/*
-   This is the URL encoded in the QR image you uploaded.
-*/
-
-const YOUR_REVIEW_FORM =
-"https://docs.google.com/forms/d/e/1FAIpQLSc4Ip8M5ptHkusM5V5SG3WFwZPkc54D3PKhJVv6X3crafnrFw/viewform?usp=pp_url&entry.1061967502=3974%20-%20Dawa%20Dawa";
+let scanner = null;
+let selectedRating = 0;
 
 
+// ==============================
+// QR SCANNER
+// ==============================
 
-/* =========================================================
-   ELEMENTS
-========================================================= */
+function startScanner(){
 
-const video =
-    document.getElementById("video");
+    if(scanner){
+        scanner.clear().catch(function(){});
+    }
 
-const cameraButton =
-    document.getElementById("cameraButton");
+    scanner = new Html5Qrcode("reader");
 
-const statusBox =
-    document.getElementById("status");
+    scanner.start(
 
-const resultBox =
-    document.getElementById("result");
-
-const reviewButton =
-    document.getElementById("reviewButton");
-
-const resetButton =
-    document.getElementById("resetButton");
-
-
-
-/* =========================================================
-   VARIABLES
-========================================================= */
-
-let stream = null;
-
-let scanning = false;
-
-let animationFrame = null;
-
-
-
-/* =========================================================
-   CANVAS
-========================================================= */
-
-const canvas =
-    document.createElement("canvas");
-
-const context =
-    canvas.getContext(
-        "2d",
         {
-            willReadFrequently:true
+            facingMode:"environment"
+        },
+
+        {
+            fps:10,
+            qrbox:{
+                width:250,
+                height:250
+            }
+        },
+
+        function(decodedText){
+
+            document.getElementById("status").innerText =
+                "QR code scanned successfully.";
+
+            // Stop scanner
+            scanner.clear().catch(function(){});
+
+            // Show test form
+            document
+                .getElementById("reviewSection")
+                .classList.remove("hidden");
+
+            /*
+             IMPORTANT:
+
+             The scanned URL is intentionally NOT submitted
+             to Google or another review service.
+
+             It is only displayed as part of this educational
+             QR-scanning demonstration.
+            */
+
+            console.log("Scanned QR:", decodedText);
+
+        },
+
+        function(errorMessage){
+
+            // Scanner is still looking.
         }
-    );
 
+    ).catch(function(error){
 
-
-/* =========================================================
-   CAMERA BUTTON
-========================================================= */
-
-function cameraButtonClicked(){
-
-    if(scanning){
-
-        stopCamera();
-
-    }
-
-    else{
-
-        startCamera();
-
-    }
-
-}
-
-
-
-/* =========================================================
-   START CAMERA
-========================================================= */
-
-async function startCamera(){
-
-    /*
-       Check browser support
-    */
-
-    if(
-        !navigator.mediaDevices ||
-        !navigator.mediaDevices.getUserMedia
-    ){
-
-        showError(
-            "Camera is not supported by this browser."
-        );
-
-        return;
-
-    }
-
-
-    /*
-       IMPORTANT:
-       Camera normally requires HTTPS.
-    */
-
-    if(
-        location.protocol !== "https:" &&
-        location.hostname !== "localhost" &&
-        location.hostname !== "127.0.0.1"
-    ){
-
-        showError(
-            "Camera requires HTTPS. Open this page from an HTTPS website or suitable local server."
-        );
-
-        return;
-
-    }
-
-
-    statusBox.innerHTML =
-        "Requesting camera permission...";
-
-    cameraButton.disabled = true;
-
-
-    try{
-
-        /*
-           Rear camera
-        */
-
-        stream =
-            await navigator.mediaDevices.getUserMedia({
-
-                video:{
-                    facingMode:{
-                        ideal:"environment"
-                    },
-
-                    width:{
-                        ideal:1280
-                    },
-
-                    height:{
-                        ideal:720
-                    }
-                },
-
-                audio:false
-
-            });
-
-
-        /*
-           Attach camera
-        */
-
-        video.srcObject =
-            stream;
-
-
-        /*
-           Start video
-        */
-
-        await video.play();
-
-
-        scanning = true;
-
-
-        cameraButton.disabled =
-            false;
-
-
-        cameraButton.innerHTML =
-            "⛔ Stop Camera";
-
-
-        cameraButton.classList.add(
-            "stop"
-        );
-
-
-        statusBox.innerHTML =
-            "📷 Camera is active. Point it at the QR code.";
-
-
-        /*
-           Start QR detection
-        */
-
-        scanQRCode();
-
-    }
-
-    catch(error){
+        document.getElementById("status").innerText =
+            "Camera could not be opened. Allow camera permission and use HTTPS.";
 
         console.log(error);
 
-
-        cameraButton.disabled =
-            false;
-
-
-        cameraButton.innerHTML =
-            "📷 Open Mobile Camera";
-
-
-        cameraButton.classList.remove(
-            "stop"
-        );
-
-
-        if(
-            error.name ===
-            "NotAllowedError"
-        ){
-
-            showError(
-                "Camera permission was denied. Please allow camera access in your browser settings."
-            );
-
-        }
-
-        else if(
-            error.name ===
-            "NotFoundError"
-        ){
-
-            showError(
-                "No camera was found on this phone."
-            );
-
-        }
-
-        else if(
-            error.name ===
-            "NotReadableError"
-        ){
-
-            showError(
-                "The camera is being used by another application."
-            );
-
-        }
-
-        else{
-
-            showError(
-                "Camera could not be opened: " +
-                error.message
-            );
-
-        }
-
-    }
+    });
 
 }
 
 
+// ==============================
+// STAR RATING
+// ==============================
 
-/* =========================================================
-   SCAN QR CODE
-========================================================= */
+const stars = document.querySelectorAll(".star");
 
-function scanQRCode(){
+stars.forEach(function(star){
 
-    if(!scanning){
+    star.addEventListener("click",function(){
 
-        return;
+        selectedRating =
+            Number(this.dataset.rating);
 
-    }
+        stars.forEach(function(s){
 
+            if(
+                Number(s.dataset.rating)
+                <= selectedRating
+            ){
 
-    if(video.readyState >= 2){
+                s.classList.add("active");
 
-        const width =
-            video.videoWidth;
+            }else{
 
-        const height =
-            video.videoHeight;
-
-
-        if(
-            width > 0 &&
-            height > 0
-        ){
-
-            /*
-               Canvas dimensions
-            */
-
-            canvas.width =
-                width;
-
-            canvas.height =
-                height;
-
-
-            /*
-               Draw video
-            */
-
-            context.drawImage(
-                video,
-                0,
-                0,
-                width,
-                height
-            );
-
-
-            /*
-               Read image
-            */
-
-            const imageData =
-                context.getImageData(
-                    0,
-                    0,
-                    width,
-                    height
-                );
-
-
-            /*
-               Detect QR
-            */
-
-            const code =
-                jsQR(
-                    imageData.data,
-                    imageData.width,
-                    imageData.height,
-                    {
-                        inversionAttempts:
-                            "attemptBoth"
-                    }
-                );
-
-
-            /*
-               QR FOUND
-            */
-
-            if(code){
-
-                qrFound(
-                    code.data
-                );
-
-                return;
+                s.classList.remove("active");
 
             }
 
-        }
+        });
 
+    });
+
+});
+
+
+// ==============================
+// SUBMIT TEST REVIEW
+// ==============================
+
+function submitReview(){
+
+    const email =
+        document.getElementById("email").value.trim();
+
+    const text =
+        document.getElementById("reviewText").value.trim();
+
+
+    if(!email){
+
+        alert("Enter a test email.");
+
+        return;
     }
 
 
-    /*
-       Continue
-    */
+    if(selectedRating === 0){
 
-    animationFrame =
-        requestAnimationFrame(
-            scanQRCode
-        );
+        alert("Please select a rating.");
 
-}
-
-
-
-/* =========================================================
-   QR FOUND
-========================================================= */
-
-function qrFound(data){
-
-    scanning = false;
-
-
-    if(animationFrame){
-
-        cancelAnimationFrame(
-            animationFrame
-        );
-
-        animationFrame = null;
-
+        return;
     }
 
 
-    /*
-       Show actual scanned value
-    */
+    if(!text){
 
-    resultBox.innerText =
-        data;
+        alert("Write a test review.");
 
-
-    /*
-       Check whether it is YOUR QR
-    */
-
-    if(
-        data.includes(
-            "docs.google.com/forms"
-        )
-    ){
-
-        statusBox.innerHTML =
-            "✅ QR code recognized. Review form is ready.";
-
-        reviewButton.href =
-            data;
-
-        reviewButton.style.display =
-            "block";
-
-    }
-
-    else{
-
-        statusBox.innerHTML =
-            "QR code scanned successfully.";
-
-        /*
-           For a different QR code,
-           don't automatically redirect.
-        */
-
-        reviewButton.style.display =
-            "none";
-
+        return;
     }
 
 
-    /*
-       Stop camera
-    */
+    const review = {
 
-    stopCamera(false);
+        email:email,
 
+        rating:selectedRating,
 
-    cameraButton.disabled =
-        false;
+        text:text,
 
+        date:new Date().toLocaleString()
 
-    cameraButton.innerHTML =
-        "📷 Scan Again";
+    };
 
 
-    cameraButton.classList.remove(
-        "stop"
+    let reviews =
+        JSON.parse(
+            localStorage.getItem("demoReviews")
+        ) || [];
+
+
+    reviews.push(review);
+
+
+    localStorage.setItem(
+        "demoReviews",
+        JSON.stringify(reviews)
     );
 
 
-    resetButton.style.display =
-        "block";
+    alert("Test review saved locally.");
+
+
+    clearForm();
+
+    loadReviews();
 
 }
 
 
+// ==============================
+// CLEAR FORM
+// ==============================
 
-/* =========================================================
-   STOP CAMERA
-========================================================= */
+function clearForm(){
 
-function stopCamera(updateStatus = true){
+    document.getElementById("email").value = "";
 
-    scanning = false;
+    document.getElementById("reviewText").value = "";
 
+    selectedRating = 0;
 
-    if(animationFrame){
+    stars.forEach(function(star){
 
-        cancelAnimationFrame(
-            animationFrame
-        );
+        star.classList.remove("active");
 
-        animationFrame = null;
-
-    }
-
-
-    if(stream){
-
-        stream.getTracks().forEach(
-            function(track){
-
-                track.stop();
-
-            }
-        );
-
-        stream = null;
-
-    }
-
-
-    video.srcObject =
-        null;
-
-
-    if(updateStatus){
-
-        statusBox.innerHTML =
-            "Camera stopped.";
-
-        cameraButton.disabled =
-            false;
-
-        cameraButton.innerHTML =
-            "📷 Open Mobile Camera";
-
-        cameraButton.classList.remove(
-            "stop"
-        );
-
-    }
+    });
 
 }
 
 
+// ==============================
+// LOAD REVIEWS
+// ==============================
 
-/* =========================================================
-   RESET
-========================================================= */
+function loadReviews(){
 
-function resetScanner(){
-
-    resultBox.innerText =
-        "No QR code scanned yet.";
-
-
-    reviewButton.style.display =
-        "none";
+    const reviews =
+        JSON.parse(
+            localStorage.getItem("demoReviews")
+        ) || [];
 
 
-    resetButton.style.display =
-        "none";
+    document.getElementById("reviewCount").innerText =
+        reviews.length;
 
 
-    statusBox.innerHTML =
-        "Camera is currently off.";
+    const container =
+        document.getElementById("reviews");
 
 
-    cameraButton.innerHTML =
-        "📷 Open Mobile Camera";
-
-}
+    container.innerHTML = "";
 
 
+    reviews.forEach(function(review){
 
-/* =========================================================
-   ERROR
-========================================================= */
+        const div =
+            document.createElement("div");
 
-function showError(message){
-
-    statusBox.innerHTML =
-        "⚠️ " + message;
-
-    statusBox.style.color =
-        "#b3261e";
-
-}
+        div.className = "review";
 
 
+        let starHTML = "";
 
-/* =========================================================
-   PAGE VISIBILITY
-========================================================= */
+        for(let i = 1; i <= 5; i++){
 
-document.addEventListener(
-    "visibilitychange",
-    function(){
-
-        if(document.hidden){
-
-            if(scanning){
-
-                stopCamera();
-
-            }
+            starHTML +=
+                i <= review.rating
+                ? "★"
+                : "☆";
 
         }
 
+
+        div.innerHTML = `
+
+            <strong>${escapeHTML(review.email)}</strong>
+
+            <div class="review-stars">
+                ${starHTML}
+            </div>
+
+            <p>
+                ${escapeHTML(review.text)}
+            </p>
+
+            <small>
+                ${escapeHTML(review.date)}
+            </small>
+
+        `;
+
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+// ==============================
+// DELETE ALL
+// ==============================
+
+function clearAllReviews(){
+
+    if(
+        confirm("Delete all test reviews?")
+    ){
+
+        localStorage.removeItem(
+            "demoReviews"
+        );
+
+        loadReviews();
+
     }
-);
+
+}
+
+
+// ==============================
+// SECURITY
+// ==============================
+
+function escapeHTML(text){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent = text;
+
+    return div.innerHTML;
+
+}
+
+
+// Load saved demo data
+loadReviews();
 
 </script>
 
-
 </body>
-
 </html>
